@@ -1,0 +1,5 @@
+apiVersion: v2
+name: multi-helm-k8s-cronjob
+description: A Helm Chart for Creating a Multiple Kubernetes Cron Jobs
+type: application
+version: 0.1.0

@@ -1,0 +1,12 @@
+env: staging
+image:
+  repository: my-image-repository
+  tag: 0.1
+  pullPolicy: IfNotPresent
+cronjobs:
+  - name: take-backup
+    schedule: "*/30 * * * *"
+    command: /opt/service/take_backup.py
+  - name: trim-backups
+    schedule: "0 8 * * 0"
+    command: /opt/service/trim_backups.py

@@ -1,0 +1,36 @@
+{{- range $cronjob := .Values.cronjobs }}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .name }}
+spec:
+  schedule: {{ .schedule | quote }}
+  successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 10
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: {{ $.Chart.Name }}
+              image: {{ $.Values.image.repository }}:{{ $.Values.image.tag }}
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              env:
+                - name: ENV
+                  value: {{ $.Values.env }}
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  {{ .command }}
+              volumeMounts:
+                - name: service-config
+                  mountPath: "/opt/service/service-config.json"
+                  subPath: "service-config.json"
+          volumes:
+            - name: service-config
+              configMap:
+                name: {{ include "app.fullname" $ }}-configmap
+          restartPolicy: OnFailure
+{{- end -}}

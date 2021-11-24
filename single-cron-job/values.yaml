@@ -1,0 +1,9 @@
+env: staging
+image:
+  repository: my-image-repository
+  tag: 0.1
+  pullPolicy: IfNotPresent
+cronjob:
+  name: take-backup
+  schedule: "*/30 * * * *"
+  command: /opt/service/take_backup.py
